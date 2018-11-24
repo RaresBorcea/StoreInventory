@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?><!-- Copyright (C) 2016 The Android Open Source Project
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context="com.arby.storeinventory.EditorActivity">
+
+    <ImageView
+        android:id="@+id/picture"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:paddingTop="4dp"
+        android:src="@drawable/ic_add"></ImageView>
+
+    <TextView
+        android:id="@+id/add_instr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingTop="12dp"
+        android:textSize="18sp"
+        tools:text="Press the icon to add image" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="20dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/CategoryStyle"
+                android:text="@string/hint_item_name" />
+
+            <TextView
+                style="@style/CategoryStyle"
+                android:layout_marginTop="16dp"
+                android:text="@string/hint_item_price" />
+
+            <TextView
+                style="@style/CategoryStyle"
+                android:layout_marginTop="16dp"
+                android:text="@string/hint_item_supplier" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_weight="4"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edit_name"
+                style="@style/EditorFieldStyle"
+                android:inputType="textCapSentences" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edit_price"
+                    style="@style/EditorFieldStyle"
+                    android:inputType="numberDecimal" />
+
+                <TextView
+                    style="@style/EditorUnitsStyle"
+                    android:text="@string/unit_item_money" />
+
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/edit_phone"
+                style="@style/EditorFieldStyle"
+                android:inputType="number" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/reduce"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="12dp"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:onClick="reduceButton"
+            android:text="-"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/colorAccent"
+            android:onClick="addButton"
+            android:text="+"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/edit_quantity"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textAlignment="center"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
