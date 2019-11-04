@@ -20,7 +20,7 @@ import android.widget.ListView;
 import com.arby.storeinventory.data.ItemContract.ItemEntry;
 
 /**
- * Displays list of items that were entered and stored in the app.
+ * Display list of items that were entered and stored in the app
  */
 public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -44,7 +44,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // Find the ListView which will be populated with the item data
         ListView itemListView = (ListView) findViewById(R.id.list);
 
-        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items
         View emptyView = findViewById(R.id.empty_view);
         itemListView.setEmptyView(emptyView);
         // Setup cursor adapter using cursor from last step
@@ -52,17 +52,17 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         // Attach cursor adapter to the ListView
         itemListView.setAdapter(cursorAdapter);
 
-        // Prepare the loader.  Either re-connect with an existing one,
-        // or start a new one.
+        // Prepare the loader. Either re-connect with an existing one,
+        // or start a new one
         getLoaderManager().initLoader(STORE_LOADER_ID, null, this);
     }
 
     /**
-     * Helper method to insert hardcoded item data into the database. For debugging purposes only.
+     * Helper method to insert hardcoded item data into the database. For debugging purposes only
      */
     private void insertItem() {
         // Create a ContentValues object where column names are the keys,
-        // and example item attributes are the values.
+        // and example item attributes are the values
         ContentValues values = new ContentValues();
         values.put(ItemEntry.COLUMN_ITEM_NAME, "Example product");
         values.put(ItemEntry.COLUMN_ITEM_IMAGE, "android.resource://com.arby.storeinventory/drawable/ic_example");
@@ -70,24 +70,20 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
         values.put(ItemEntry.COLUMN_ITEM_QUANTITY, 0);
         values.put(ItemEntry.COLUMN_ITEM_SUPPLIER, "+40 727 543 212");
 
-        // Insert a new row for example into the provider using the ContentResolver.
-        // Use the {@link ItemEntry#CONTENT_URI} to indicate that we want to insert
-        // into the store database table.
-        // Receive the new content URI that will allow us to access Toto's data in the future.
+        // Insert a new row for example into the provider using the ContentResolver
+        // Receive the new content URI that will allow us to access data in the future
         Uri newUri = getContentResolver().insert(ItemEntry.CONTENT_URI, values);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu options from the res/menu/menu_catalog.xml file.
-        // This adds menu items to the app bar.
+        // Inflate the menu options from the res/menu/menu_catalog.xml file
         getMenuInflater().inflate(R.menu.menu_catalog, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
             // Respond to a click on the "Insert dummy data" menu option
             case R.id.action_insert_dummy_data:
@@ -102,7 +98,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     }
 
     /**
-     * Helper method to delete all items in the database.
+     * Helper method to delete all items in the database
      */
     private void deleteAllItems() {
         int rowsDeleted = getContentResolver().delete(ItemEntry.CONTENT_URI, null, null);
@@ -118,23 +114,21 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
                 ItemEntry.COLUMN_ITEM_PRICE
         };
         // Now create and return a CursorLoader that will take care of
-        // creating a Cursor for the data being displayed.
+        // creating a Cursor for the data being displayed
         return new CursorLoader(this, ItemEntry.CONTENT_URI,
                 projection, null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        // Swap the new cursor in.  (The framework will take care of closing the
-        // old cursor once we return.)
+        // Swap the new cursor in
         cursorAdapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        // This is called when the last Cursor provided to onLoadFinished()
-        // above is about to be closed.  We need to make sure we are no
-        // longer using it.
+        // Called when the last Cursor provided to onLoadFinished()
+        // above is about to be closed. Need to make sure we are not using it
         cursorAdapter.swapCursor(null);
     }
 
