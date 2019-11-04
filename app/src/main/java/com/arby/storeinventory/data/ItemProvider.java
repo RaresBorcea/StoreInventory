@@ -17,57 +17,37 @@ import com.arby.storeinventory.data.ItemContract.ItemEntry;
 
 
 /**
- * {@link ContentProvider} for Store Inventory app.
+ * ConentProvider for Store Inventory app
  */
 public class ItemProvider extends ContentProvider {
 
     private ItemDbHelper mDbHelper;
 
-    /**
-     * Tag for the log messages
-     */
+    // Tag for the log messages
     public static final String LOG_TAG = ItemProvider.class.getSimpleName();
 
-    /**
-     * URI matcher code for the content URI for the items table
-     */
+    // URI matcher code for the content URI for the items table
     public static final int ITEMS = 100;
 
-    /**
-     * URI matcher code for the content URI for a single item in the items table
-     */
+    // URI matcher code for the content URI for a single item in the items table
     public static final int ITEM_ID = 101;
 
     /**
      * URI matcher object to match a context URI to a corresponding code.
      * The input passed into the constructor represents the code to return for the root URI.
-     * It's common to use NO_MATCH as the input for this case.
      */
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
-    // Static initializer. This is run the first time anything is called from this class.
+    // Static initializer. This is run the first time anything is called from this class
     static {
-        // The calls to addURI() go here, for all of the content URI patterns that the provider
-        // should recognize. All paths added to the UriMatcher have a corresponding code to return
-        // when a match is found.
-
-        // The content URI of the form "content://com.arby.storeinventory.items/items" will map to the
-        // integer code {@link #ITEMS}. This URI is used to provide access to MULTIPLE rows
-        // of the items table.
         sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_STORE, ITEMS);
 
-        // The content URI of the form "content://com.arby.storeinventory.items/items/#" will map to the
-        // integer code {@link #ITEM_ID}. This URI is used to provide access to ONE single row
-        // of the items table.
-
         // In this case, the "#" wildcard is used where "#" can be substituted for an integer.
-        // For example, "content://com.arby.storeinventory.items/items/3" matches, but
-        // "content://com.arby.storeinventory.items/items" (without a number at the end) doesn't match.
         sUriMatcher.addURI(ItemContract.CONTENT_AUTHORITY, ItemContract.PATH_STORE + "/#", ITEM_ID);
     }
 
     /**
-     * Initialize the provider and the database helper object.
+     * Initialize the provider and the database helper object
      */
     @Override
     public boolean onCreate() {
@@ -76,7 +56,7 @@ public class ItemProvider extends ContentProvider {
     }
 
     /**
-     * Perform the query for the given URI. Use the given projection, selection, selection arguments, and sort order.
+     * Perform the query for the given URI. Use the given projection, selection, selection arguments, and sort order
      */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
@@ -96,33 +76,27 @@ public class ItemProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             case ITEM_ID:
-                // For the ITEM_ID code, extract out the ID from the URI.
-                // For an example URI such as "content://com.arby.storeinventory.items/items/3",
-                // the selection will be "_id=?" and the selection argument will be a
-                // String array containing the actual ID of 3 in this case.
-                //
-                // For every "?" in the selection, we need to have an element in the selection
-                // arguments that will fill in the "?". Since we have 1 question mark in the
-                // selection, we have 1 String in the selection arguments' String array.
+                // For the ITEM_ID code, extract out the ID from the URI
                 selection = ItemEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
 
                 // This will perform a query on the items table where the _id equals 3 to return a
-                // Cursor containing that row of the table.
+                // cursor containing that row of the table.
                 cursor = database.query(ItemEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-        //Set notification URI on the cursor, so we know what content URI the Cursor was created for.
-        //If the data at this URI changes, then we know we need to update the Cursor.
+
+        // Set notification URI on the cursor, so we know what content URI the Cursor was created for
+        // If the data at this URI changes, then we know we need to update the Cursor
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
     /**
-     * Insert new data into the provider with the given ContentValues.
+     * Insert new data into the provider with the given ContentValues
      */
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
@@ -151,7 +125,7 @@ public class ItemProvider extends ContentProvider {
             throw new IllegalArgumentException("Item requires a valid price");
         }
 
-        // No need to check the quantity.
+        // No need to check the quantity
 
         String phone = values.getAsString(ItemEntry.COLUMN_ITEM_SUPPLIER);
         if (phone == null) {
@@ -169,7 +143,7 @@ public class ItemProvider extends ContentProvider {
         // Insert the new item with the given values
         long id = database.insert(ItemEntry.TABLE_NAME, null, values);
 
-        // If the ID is -1, then the insertion failed. Log an error and return null.
+        // If the ID is -1, then the insertion failed. Log an error and return null
         if (id == -1) {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
@@ -184,7 +158,7 @@ public class ItemProvider extends ContentProvider {
     }
 
     /**
-     * Updates the data at the given selection and selection arguments, with the new ContentValues.
+     * Update the data at the given selection and selection arguments, with the new ContentValues
      */
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection,
@@ -194,9 +168,6 @@ public class ItemProvider extends ContentProvider {
             case ITEMS:
                 return updateItem(uri, contentValues, selection, selectionArgs);
             case ITEM_ID:
-                // For the ITEM_ID code, extract out the ID from the URI,
-                // so we know which row to update. Selection will be "_id=?" and selection
-                // arguments will be a String array containing the actual ID.
                 selection = ItemEntry._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 return updateItem(uri, contentValues, selection, selectionArgs);
@@ -233,7 +204,7 @@ public class ItemProvider extends ContentProvider {
             }
         }
 
-        // No need to check the quantity.
+        // No need to check the quantity
 
         // If there are no values to update, then don't try to update the database
         if (values.size() == 0) {
@@ -257,7 +228,7 @@ public class ItemProvider extends ContentProvider {
     }
 
     /**
-     * Delete the data at the given selection and selection arguments.
+     * Delete the data at the given selection and selection arguments
      */
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -298,7 +269,7 @@ public class ItemProvider extends ContentProvider {
     }
 
     /**
-     * Returns the MIME type of data for the content URI.
+     * Returns the MIME type of data for the content URI
      */
     @Override
     public String getType(Uri uri) {
